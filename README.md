@@ -11,7 +11,7 @@ gsocks5 consists of two different parts: client and server.
 
 * The client component runs on your computer and accepts TCP connections from your local host.
 
-* The server component runs on your remote host and accepts connections from the client component. TLS can be enabled on this server by setting `server_key` and `server_cert` parameters. If either or both of those parameters is not set, TLS will be disabled.
+* The server component runs on your remote host and accepts connections from the client component. TLS can be enabled on this server by setting `server_key` and `server_cert` parameters. If either or both of those parameters are not set, TLS will be disabled.
 
 TLS is used to encrypt traffic(SOCKS5 protocol messages and other plain text TCP traffic like HTTP) between server and client components. After SOCKS5 is done with its job, your client and the outside world continue communication over that secured socket. This may seem bad to you. I think, this design choice doesn't create a performance bottleneck or security problem.
 
