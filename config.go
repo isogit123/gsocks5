@@ -44,6 +44,7 @@ type config struct {
 	KeepAlivePeriod    int    `json:"keepalive_period"`
 	GracefulPeriod     int    `json:"graceful_period"`
 	DialTimeout        int    `json:"dial_timeout"`
+	UseTLS             bool   `json:"use_tls"`
 }
 
 func newConfig(file string) (config, error) {
@@ -72,14 +73,5 @@ func newConfig(file string) (config, error) {
 		cfg.DialTimeout = defaultDialTimeout
 	}
 
-	if cfg.Role == roleServer {
-		if cfg.ServerCert == "" {
-			return cfg, errors.New("server_cert cannot be empty")
-		}
-
-		if cfg.ServerKey == "" {
-			return cfg, errors.New("server_key cannot be empty")
-		}
-	}
 	return cfg, nil
 }

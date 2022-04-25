@@ -170,18 +170,27 @@ func (s *server) run() error {
 		return err
 	}
 	s.socks5 = ss
+	var ln net.Listener
+	var lnErr error
+	if s.cfg.ServerCert == "" || s.cfg.ServerKey == "" {
+		ln, lnErr = net.Listen("tcp", s.cfg.ServerAddr)
+		if lnErr != nil {
+			return err
+		}
+		log.Println("[INF] gsocks5: TCP server runs on", s.cfg.ServerAddr)
+	} else {
+		cer, err := tls.LoadX509KeyPair(s.cfg.ServerCert, s.cfg.ServerKey)
+		if err != nil {
+			return err
+		}
+		config := &tls.Config{Certificates: []tls.Certificate{cer}}
+		ln, lnErr = tls.Listen("tcp", s.cfg.ServerAddr, config)
+		if lnErr != nil {
+			return err
+		}
 
-	cer, err := tls.LoadX509KeyPair(s.cfg.ServerCert, s.cfg.ServerKey)
-	if err != nil {
-		return err
+		log.Println("[INF] gsocks5: TLS server runs on", s.cfg.ServerAddr)
 	}
-	config := &tls.Config{Certificates: []tls.Certificate{cer}}
-	ln, err := tls.Listen("tcp", s.cfg.ServerAddr, config)
-	if err != nil {
-		return err
-	}
-
-	log.Println("[INF] gsocks5: TLS server runs on", s.cfg.ServerAddr)
 	s.wg.Add(1)
 	go s.serve(ln)
 

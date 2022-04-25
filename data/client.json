@@ -1,5 +1,6 @@
 {
         "debug": true,
+        "use_tls": false,
         "insecure_skip_verify": true,
         "server_addr":"your-remote-server:port-number",
         "client_addr": "localhost:1080",

@@ -11,7 +11,7 @@ gsocks5 consists of two different parts: client and server.
 
 * The client component runs on your computer and accepts TCP connections from your local host.
 
-* The server component runs on your remote host and accepts connections from the client component. TLS is enabled on this server by default.
+* The server component runs on your remote host and accepts connections from the client component. TLS can be enabled on this server by setting `server_key` and `server_cert` parameters. If either or both of those parameters is not set, TLS will be disabled.
 
 TLS is used to encrypt traffic(SOCKS5 protocol messages and other plain text TCP traffic like HTTP) between server and client components. After SOCKS5 is done with its job, your client and the outside world continue communication over that secured socket. This may seem bad to you. I think, this design choice doesn't create a performance bottleneck or security problem.
 
@@ -53,6 +53,7 @@ Field        |  Type   | Description
 ------------ | ------- |-------------
 role | string | Role of this server. Set 'client' on your local host.
 debug | boolean | Disables or enables debug mode.
+use_tls | boolean | Disables or enables TLS.
 insecure_skip_verify | boolean | Disables TLS verification. It's useful if you use a self-signed TLS certificate.
 server_addr | string | Remote SOCKS5 server address, the syntax of laddr is "host:port", like "127.0.0.1:8080".
 client_addr | string | Local proxy server address, the syntax of laddr is "host:port", like "127.0.0.1:8080".

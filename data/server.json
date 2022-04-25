@@ -1,9 +1,7 @@
 {
-        "debug": true,
-        "server_cert": "cert.pem",
-        "server_key": "key.pem",
-        "server_addr":"0.0.0.0:8388",
-        "password":"barfoo!",
+        "debug": false,
+        "server_addr":"0.0.0.0:$PORT",
+        "password":"$PASSWORD",
         "graceful_period": 1,
         "role": "server"
 }

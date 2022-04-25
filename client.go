@@ -105,14 +105,19 @@ func (c *client) authenticate(conn io.ReadWriter, errChan chan error) {
 func (c *client) clientConn(conn net.Conn) {
 	defer c.wg.Done()
 	defer closeConn(conn)
-
-	d := &net.Dialer{
-		Timeout: c.dialTimeout,
+	var rConn net.Conn
+	var err error
+	if c.cfg.UseTLS {
+		d := &net.Dialer{
+			Timeout: c.dialTimeout,
+		}
+		cfg := &tls.Config{
+			InsecureSkipVerify: c.cfg.InsecureSkipVerify,
+		}
+		rConn, err = tls.DialWithDialer(d, "tcp", c.cfg.ServerAddr, cfg)
+	} else {
+		rConn, err = net.Dial("tcp", c.cfg.ServerAddr)
 	}
-	cfg := &tls.Config{
-		InsecureSkipVerify: c.cfg.InsecureSkipVerify,
-	}
-	rConn, err := tls.DialWithDialer(d, "tcp", c.cfg.ServerAddr, cfg)
 	if err != nil {
 		log.Println("[ERR] gsocks5: Failed to dial", c.cfg.ServerAddr, err)
 		return
